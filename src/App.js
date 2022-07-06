@@ -5,7 +5,7 @@ import Loader from "./components/Loader"
 
 export default () => {
 
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = React.useState(false);
     const [isStarted, setIsStarted] = React.useState(false)
     const [questionsData, setQuestionsData] = React.useState([])
     const [questions, setQuestions] = React.useState([]);
@@ -24,6 +24,7 @@ export default () => {
                 setIsLoading(false);
             }
         }
+        setIsLoading(true);
         if(isStarted) fetchQuestions()
     }, [isStarted])
 

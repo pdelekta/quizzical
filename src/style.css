@@ -133,6 +133,7 @@ body {
 .answers {
     display: flex;
     gap: 13px;
+    flex-wrap: wrap;
 }
 .answer {
     display: flex;
