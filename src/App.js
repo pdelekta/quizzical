@@ -16,6 +16,11 @@ export default () => {
         async function fetchQuestions() {
             try {
                 const response = await fetch("https://opentdb.com/api.php?amount=5&type=multiple")
+                if (!response.ok) {
+                    throw new Error(
+                      `This is an HTTP error: The status is ${response.status}`
+                    );
+                }
                 const data = await response.json()
                 setQuestionsData(data.results);
             } catch (error) {
