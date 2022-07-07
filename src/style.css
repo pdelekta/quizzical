@@ -87,7 +87,7 @@ body {
     font-size: 16px;
     color: hsla(220, 43%, 97%, 1);
     cursor: pointer;
-    transition: background .2s ease-in-out;
+    transition: background .3s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .btn:not(.disabled):hover {
@@ -96,6 +96,7 @@ body {
 
 .btn.disabled {
     background-color: hsla(220, 1%, 85%, 1);
+    cursor: default;
 }
 
 .btn:focus {
@@ -148,7 +149,7 @@ body {
     color: hsla(231, 42%, 28%, 1);
     cursor: pointer;
     background-color: hsla(220, 43%, 97%, 1);
-    transition: background .1s ease-in-out, border .1s ease-in-out;
+    transition: background .2s cubic-bezier(0.22, 0.61, 0.36, 1), border .2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .answer.active {
