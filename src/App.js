@@ -1,68 +1,78 @@
-import React from "react"
-import { nanoid } from 'nanoid'
-import QuestionComp from "./components/QuestionComp"
-import Loader from "./components/Loader"
+import React from "react";
+import { nanoid } from "nanoid";
+import QuestionComp from "./components/QuestionComp";
+import Loader from "./components/Loader";
 
 export default () => {
-
     const [isLoading, setIsLoading] = React.useState(false);
-    const [isStarted, setIsStarted] = React.useState(false)
-    const [questionsData, setQuestionsData] = React.useState([])
+    const [isStarted, setIsStarted] = React.useState(false);
+    const [questionsData, setQuestionsData] = React.useState([]);
     const [questions, setQuestions] = React.useState([]);
     const [score, setScore] = React.useState(0);
     const [isChecked, setIsChecked] = React.useState(false);
 
+    const decodeHTML = input => {
+        let textarea = document.createElement("textarea");
+        textarea.innerHTML = input;
+        return textarea.value;
+    };
+
     React.useEffect(() => {
         async function fetchQuestions() {
             try {
-                const response = await fetch("https://opentdb.com/api.php?amount=5&type=multiple")
+                const response = await fetch("https://opentdb.com/api.php?amount=5&type=multiple");
                 if (!response.ok) {
-                    throw new Error(
-                      `This is an HTTP error: The status is ${response.status}`
-                    );
+                    throw new Error(`This is an HTTP error: The status is ${response.status}`);
                 }
-                const data = await response.json()
+                const data = await response.json();
                 setQuestionsData(data.results);
             } catch (error) {
-                console.log(error)
+                console.log(error);
             } finally {
                 setIsLoading(false);
             }
         }
         setIsLoading(true);
-        if(isStarted) fetchQuestions()
-    }, [isStarted])
+        if (isStarted) fetchQuestions();
+    }, [isStarted]);
 
     React.useEffect(() => {
-        if(questionsData) setQuestions(questionsData.map(element => ({
-            id: nanoid(),
-            question: element.question,
-            correct_answer: element.correct_answer,
-            incorrect_answers: element.incorrect_answers,
-            selected_answer: ""
-            })
-        ))
-    }, [questionsData])
+        if (questionsData)
+            setQuestions(
+                questionsData.map(element => ({
+                    id: nanoid(),
+                    question: decodeHTML(element.question),
+                    correct_answer: decodeHTML(element.correct_answer),
+                    incorrect_answers: element.incorrect_answers,
+                    selected_answer: "",
+                }))
+            );
+    }, [questionsData]);
 
     function handleClick(event) {
-        const selectedQuestionId = event.target.closest(".question-container").id
-        setQuestions(prevQuestions => prevQuestions.map(question => ({
-            ...question,
-            selected_answer: selectedQuestionId === question.id ? event.target.textContent : question.selected_answer
-            })
-        ))
+        const selectedQuestionId = event.target.closest(".question-container").id;
+        setQuestions(prevQuestions =>
+            prevQuestions.map(question => ({
+                ...question,
+                selected_answer:
+                    selectedQuestionId === question.id
+                        ? event.target.textContent
+                        : question.selected_answer,
+            }))
+        );
     }
 
     function handleCheck() {
         setIsChecked(true);
         questions.map(question => {
-            if(question.selected_answer === question.correct_answer) setScore(prevScore => prevScore +1);
-        })
+            if (question.selected_answer === question.correct_answer)
+                setScore(prevScore => prevScore + 1);
+        });
     }
 
     function handleReset() {
-        setIsChecked(false)
-        setIsStarted(false)
+        setIsChecked(false);
+        setIsStarted(false);
         setScore(0);
         setQuestionsData([]);
         setIsLoading(true);
@@ -80,29 +90,43 @@ export default () => {
             isStarted={isStarted}
             isChecked={isChecked}
         />
-        ))
+    ));
 
     return (
         <div className="container">
             <span className="bg-blob-1" />
             <span className="bg-blob-2" />
-            {(isStarted && !isLoading)
-                ?
+            {isStarted && !isLoading ? (
                 <>
                     {questionArray}
                     <div className="button-container">
-                        {isChecked && <span className="score">You scored {score}/5 correct answers</span>}
-                        {!isChecked && !isLoading && <button className="btn btn--submit" onClick={handleCheck}>Check answers</button>}
-                        {isChecked && <button className="btn btn--submit" onClick={handleReset}>Play Again</button>}
+                        {isChecked && (
+                            <span className="score">You scored {score}/5 correct answers</span>
+                        )}
+                        {!isChecked && !isLoading && (
+                            <button className="btn btn--submit" onClick={handleCheck}>
+                                Check answers
+                            </button>
+                        )}
+                        {isChecked && (
+                            <button className="btn btn--submit" onClick={handleReset}>
+                                Play Again
+                            </button>
+                        )}
                     </div>
                 </>
-                :
+            ) : (
                 <>
                     <h1 className="title">Quizzical</h1>
                     <span className="app-description">Let's see how much You know!</span>
-                    <button className={`btn ${(isLoading && isStarted) ? "disabled" : ""}`} onClick={() => setIsStarted(true)}>{(isLoading && isStarted) ? <Loader /> : "Start quiz"}</button>
-            </>
-            }
+                    <button
+                        className={`btn ${isLoading && isStarted ? "disabled" : ""}`}
+                        onClick={() => setIsStarted(true)}
+                    >
+                        {isLoading && isStarted ? <Loader /> : "Start quiz"}
+                    </button>
+                </>
+            )}
         </div>
-    )
-}
+    );
+};
