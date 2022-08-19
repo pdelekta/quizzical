@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import QuestionComp from "./components/QuestionComp";
 import Loader from "./components/Loader";
 
-export default () => {
+const App = () => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [isStarted, setIsStarted] = React.useState(false);
     const [questionsData, setQuestionsData] = React.useState([]);
@@ -67,6 +67,7 @@ export default () => {
         questions.map(question => {
             if (question.selected_answer === question.correct_answer)
                 setScore(prevScore => prevScore + 1);
+            return null;
         });
     }
 
@@ -130,3 +131,5 @@ export default () => {
         </div>
     );
 };
+
+export default App;

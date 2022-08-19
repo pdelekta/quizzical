@@ -1,5 +1,5 @@
 import React from "react";
-
+// eslint-disable-next-line
 export default ({
     id,
     question,
@@ -11,6 +11,7 @@ export default ({
     isChecked,
 }) => {
     const [randomIndex, setRandomIndex] = React.useState((Math.random() * 3).toFixed(0));
+    // eslint-disable-next-line
     const [answersArray, setAnswersArray] = React.useState(getAnswersArray());
     const [answersElements, setAnswersElements] = React.useState(getAnswersElements());
 
@@ -20,6 +21,7 @@ export default ({
 
     React.useEffect(() => {
         if (selected_answer) setAnswersElements(getAnswersElements());
+        // eslint-disable-next-line
     }, [selected_answer]);
 
     function getAnswersArray() {
@@ -62,6 +64,7 @@ export default ({
 
     React.useEffect(() => {
         if (isChecked) setAnswersElements(getCheckedAnswersElements());
+        // eslint-disable-next-line
     }, [isChecked]);
 
     return (
